@@ -7,8 +7,6 @@ function isAsciiOnly(str) {
 export default class HotKeywordAnalyzeStatistics {
   _sheets = {}
   _phrases = null
-  _phraseFilter = []
-  _wordFilter = []
 
   constructor() {}
 
@@ -32,9 +30,6 @@ export default class HotKeywordAnalyzeStatistics {
       const phraseKey = data['kw']
       const phrase = (acc[phraseKey] ??= new AnalyzePhrase(phraseKey))
       phrase.increase(data)
-      if (this._phraseFilter.some((word) => phrase.words.includes(word))) {
-        phrase.enabled = false
-      }
       return acc
     }, {})
     return this._phrases
@@ -52,29 +47,9 @@ export default class HotKeywordAnalyzeStatistics {
       phrase.words.map((word) => {
         const w = (acc[word] ??= new AnalyzeWord(word))
         w?.increase(phrase.wordWeight)
-        if (this._wordFilter.includes(word) || !isAsciiOnly(word)) {
-          w.enabled = false
-        }
       })
       return acc
     }, {})
-  }
-
-  get phraseFilter() {
-    return this._phraseFilter
-  }
-
-  set phraseFilter(val) {
-    this._phraseFilter = val
-    this.resetPhrases()
-  }
-
-  get wordFilter() {
-    return this._wordFilter
-  }
-
-  set wordFilter(val) {
-    this._wordFilter = val
   }
 
   add(sheet) {

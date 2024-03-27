@@ -42,6 +42,14 @@ table {
     />
 
     <h2>Words</h2>
+    <label>
+      <input type="checkbox" v-model="wordNumberOnlyFilter" />Filter number only words
+    </label>
+    <label>
+      <input type="checkbox" v-model="wordOneCharFilter" />Filter single character words
+    </label>
+    <label> <input type="checkbox" v-model="wordAsciiFilter" />Filter non-ascii only words </label>
+
     <StatisticsTable
       :filter="wordFilter"
       filterDescription="Filter words excally equal, separated by space."
@@ -70,23 +78,50 @@ function sortByWeights(items) {
   return Object.values(items).sort((a, b) => b.weight - a.weight)
 }
 
+// phrase
 const phraseFilter = reactive([])
+const sortedPhrases = computed(() => {
+  return sortByWeights(props.statistics.phrases).map((phrase) => {
+    if (phraseFilter.some((word) => phrase.words.includes(word))) {
+      phrase.enabled = false
+    }
+    return phrase
+  })
+})
+
+// word
+function isAsciiOnly(str) {
+  return /^[\x00-\x7F]*$/.test(str)
+}
+
+function isNumberOnly(str) {
+  return /^\d+$/.test(str)
+}
+
+function isOneCharOnly(str) {
+  return str.length == 1
+}
+
 const wordFilter = reactive(['for', 'of', 'with'])
+const wordNumberOnlyFilter = ref(true)
+const wordOneCharFilter = ref(true)
+const wordAsciiFilter = ref(true)
 
-props.statistics.phraseFilter = phraseFilter
-props.statistics.wordFilter = wordFilter
-
-watch(phraseFilter, () => {
-  props.statistics.phraseFilter = phraseFilter
+const sortedWords = computed(() => {
+  return sortByWeights(props.statistics.words).map((word) => {
+    if (
+      wordFilter.includes(word.key) ||
+      (wordNumberOnlyFilter.value && isNumberOnly(word.key)) ||
+      (wordOneCharFilter.value && isOneCharOnly(word.key)) ||
+      (wordAsciiFilter.value && !isAsciiOnly(word.key))
+    ) {
+      word.enabled = false
+    }
+    return word
+  })
 })
 
-watch(wordFilter, () => {
-  props.statistics.wordFilter = wordFilter
-})
-
-const sortedPhrases = computed(() => sortByWeights(props.statistics.phrases))
-const sortedWords = computed(() => sortByWeights(props.statistics.words))
-
+// top
 const topKeywordsLength = 384
 
 const topKeywords = computed(() => {
