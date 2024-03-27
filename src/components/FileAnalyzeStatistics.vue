@@ -121,6 +121,8 @@ const sortedWords = computed(() => {
   })
 })
 
+// TODO: create new statistics filter object to do the filter jobs
+
 // top
 const topKeywordsLength = 384
 
