@@ -1,37 +1,3 @@
-<style scoped>
-thead {
-  position: sticky;
-  top: 0;
-  background-color: lightgray;
-}
-table {
-  display: block;
-  min-height: 300px;
-  max-height: 300px;
-  overflow-y: auto;
-  table-layout: fixed;
-}
-
-.order {
-  width: 50px;
-}
-.content {
-  width: 400px;
-}
-.weight {
-  width: 100px;
-}
-.enabled {
-  width: 100px;
-}
-
-.filter-textarea {
-  min-width: 100%;
-  max-width: 100%;
-  min-height: 50px;
-}
-</style>
-
 <template>
   <div class="container">
     <h2>Phrases</h2>

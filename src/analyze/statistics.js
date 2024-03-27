@@ -1,9 +1,5 @@
 import { AnalyzePhrase, AnalyzeWord } from './item'
 
-function isAsciiOnly(str) {
-  return /^[\x00-\x7F]*$/.test(str)
-}
-
 export default class HotKeywordAnalyzeStatistics {
   _sheets = {}
   _phrases = null
