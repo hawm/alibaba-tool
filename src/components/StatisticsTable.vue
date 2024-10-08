@@ -87,7 +87,7 @@ const defaultFilter = filter.value.join(' ')
 const filterRef = ref(defaultFilter)
 
 watch(filterRef, () => {
-  filter.length = 0
-  filter.push(...filterRef.value.split(/\s+/))
+  filter.value.length = 0
+  filter.value.push(...filterRef.value.split(/\s+/))
 })
 </script>
