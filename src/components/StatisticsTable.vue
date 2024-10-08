@@ -36,7 +36,7 @@ table {
   <div>
     <p>
       {{ filterDescription }}
-      <a href="#" @click.prevent="() => (filterRef = defaultFilter)">Reset</a>
+      <a href="#" @click.prevent="() => filterRef = defaultFilter">Reset</a>
     </p>
     <textarea class="filter-textarea" v-model="filterRef"></textarea>
   </div>
@@ -55,7 +55,7 @@ table {
     </thead>
     <tbody>
       <template v-for="(item, index) in items">
-        <tr v-if="item.weight > 0">
+        <tr v-if="item.weight > 0" v-bind:key="item.index">
           <td>{{ index + 1 }}</td>
           <td>{{ item.key }}</td>
           <td>{{ item.weight.toFixed(2) }}</td>
@@ -69,13 +69,11 @@ table {
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, defineModel } from 'vue'
+const filter = defineModel('filter', {required: true})
 
+// eslint-disable-next-line no-unused-vars
 const props = defineProps({
-  filter: {
-    type: Array,
-    default: () => []
-  },
   filterDescription: {
     type: String
   },
@@ -85,11 +83,11 @@ const props = defineProps({
   }
 })
 
-const defaultFilter = props.filter.join(' ')
+const defaultFilter = filter.value.join(' ')
 const filterRef = ref(defaultFilter)
 
 watch(filterRef, () => {
-  props.filter.length = 0
-  props.filter.push(...filterRef.value.split(/\s+/))
+  filter.length = 0
+  filter.push(...filterRef.value.split(/\s+/))
 })
 </script>

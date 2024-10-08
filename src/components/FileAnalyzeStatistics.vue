@@ -2,7 +2,7 @@
   <div class="container">
     <h2>Phrases</h2>
     <StatisticsTable
-      :filter="phraseFilter"
+      v-model:filter="phraseFilter"
       filterDescription="Filter phrase include word, separated by space."
       :items="sortedPhrases"
     />
@@ -17,7 +17,7 @@
     <label> <input type="checkbox" v-model="wordAsciiFilter" />Filter non-ascii only words </label>
 
     <StatisticsTable
-      :filter="wordFilter"
+      v-model:filter="wordFilter"
       filterDescription="Filter words excally equal, separated by space."
       :items="sortedWords"
     />
